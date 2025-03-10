@@ -3,6 +3,7 @@ import moderngl as mgl
 import sys
 from model import *
 from camera import Camera
+from light import Light
 
 class GrapghicsEngine:
     def __init__(self, win_size=(1600, 900)):
@@ -16,11 +17,19 @@ class GrapghicsEngine:
         pg.display.gl_set_attribute(pg.GL_CONTEXT_PROFILE_MASK, pg.GL_CONTEXT_PROFILE_CORE)
         # Create OpenGL context
         pg.display.set_mode(self.WIN_SIZE, flags = pg.OPENGL | pg.DOUBLEBUF)
+        # Make the mouse dissapear
+        pg.event.set_grab(True)
+        pg.mouse.set_visible(False)
         # Detect and use existing OpenGL context
         self.ctx = mgl.create_context()
+        # self.ctx.front_face = 'cw' To see the behind of the objects!!
+        self.ctx.enable(flags = mgl.DEPTH_TEST | mgl.CULL_FACE)
         # Object to help track time
         self.clock = pg.time.Clock()
         self.time = 0
+        self.delta_time = 0
+        # Light (Phong)
+        self.light = Light()
         # Camera instance
         self.camera = Camera(self)
         # Scene
@@ -48,8 +57,9 @@ class GrapghicsEngine:
         while True:
             self.get_time()
             self.check_events()
+            self.camera.update()
             self.render()
-            self.clock.tick(60)
+            self.delta_time = self.clock.tick(60)
 
 if __name__ == '__main__':
     app = GrapghicsEngine()
