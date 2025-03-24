@@ -6,8 +6,9 @@ from camera import Camera
 from light import Light
 from mesh import Mesh
 from scene import Scene
+from scene_renderer import SceneRenderer
 
-class GrapghicsEngine:
+class GraphicsEngine:
     def __init__(self, win_size=(1600, 900)):
         # PyGame initialization
         pg.init()
@@ -38,6 +39,8 @@ class GrapghicsEngine:
         self.mesh = Mesh(self)
         # Scene
         self.scene = Scene(self)
+        # Renderer
+        self.scene_renderer = SceneRenderer(self)
     
     def check_events(self):
         for event in pg.event.get():
@@ -51,7 +54,7 @@ class GrapghicsEngine:
         # Clear framebuffer
         self.ctx.clear(color=(0.08, 0.16, 0.18))
         # Render scene
-        self.scene.render()
+        self.scene_renderer.render()
         # Swap buffer
         pg.display.flip()
 
@@ -68,6 +71,6 @@ class GrapghicsEngine:
             pg.display.set_caption(f"{self.clock.get_fps():.0f}")
 
 if __name__ == '__main__':
-    app = GrapghicsEngine()
+    app = GraphicsEngine()
     app.run()
 

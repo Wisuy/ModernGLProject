@@ -5,6 +5,7 @@ layout (location = 0) out vec4 fragColor;
 in vec2 uv_0;
 in vec3 normal;
 in vec3 fragPos;
+in vec4 shadowCoord;
 
 struct Light{
     vec3 position;
@@ -16,6 +17,12 @@ struct Light{
 uniform Light light;
 uniform sampler2D u_texture_0;
 uniform vec3 camPos;
+uniform sampler2DShadow shadowMap;
+
+float getShadow(){
+    float shadow = textureProj(shadowMap, shadowCoord);
+    return shadow;
+}
 
 vec3 getLight(vec3 color){
     vec3 Normal = normalize(normal);
@@ -34,7 +41,10 @@ vec3 getLight(vec3 color){
     float spec = pow(max(dot(viewDir, reflectDir), 0), 32);
     vec3 specular = spec * light.Is;
 
-    return color * (ambient + diffuse + specular);
+    // Shadow
+    float shadow = getShadow();
+
+    return color * (ambient + (diffuse + specular) * shadow);
 }
 
 void main(){

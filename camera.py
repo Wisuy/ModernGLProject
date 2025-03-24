@@ -4,7 +4,7 @@ import pygame as pg
 FOV = 50 # Degrees
 NEAR = 0.1
 FAR = 100
-SPEED = 0.01
+SPEED = 0.02
 SENSITIVITY = 0.05
 
 class Camera:
